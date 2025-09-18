@@ -6,7 +6,7 @@
 
 Este repositorio contiene una implementación completa de **Physics-Informed Neural Networks (PINNs)** para resolver la **Ecuación de Schrödinger No Lineal (NLS)**. El proyecto incluye tanto la implementación computacional como una página web interactiva que explica la teoría, metodología y resultados.
 
-![PINNs Demo](https://github.com/user-attachments/assets/8433c625-a3f8-437d-8016-0555540b8ccf)
+
 
 ## 🎯 Descripción del Proyecto
 
