@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redes Neuronales Informadas por la Física (PINNs) para la Ecuación de Schrödinger No Lineal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .equation-card {
+            background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 40vh;
+            max-height: 400px;
+        }
+        
+        .heatmap-container {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            max-height: 500px;
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .has-tooltip:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .loss-term {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        .loss-term:hover {
+            background: #e0f2fe;
+            transform: scale(1.05);
+        }
+        
+        .pinn-architecture {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .neuron-layer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .neuron {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #60a5fa, #3b82f6);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .connection {
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 glass">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-white">PINNs para NLS</h1>
+                <div class="flex space-x-6 text-white">
+                    <a href="#introduccion" class="nav-link px-4 py-2">Introducción</a>
+                    <a href="#derivacion" class="nav-link px-4 py-2">Derivación Matemática</a>
+                    <a href="#soluciones" class="nav-link px-4 py-2">Soluciones Analíticas</a>
+                    <a href="#pinn-teoria" class="nav-link px-4 py-2">Teoría PINN</a>
+                    <a href="#implementacion" class="nav-link px-4 py-2">Implementación</a>
+                    <a href="#resultados" class="nav-link px-4 py-2">Resultados</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="relative py-20 text-center text-white">
+            <div class="container mx-auto px-6">
+                <h1 class="text-5xl font-bold mb-6">
+                    Redes Neuronales Informadas por la Física
+                </h1>
+                <h2 class="text-3xl font-light mb-8">
+                    Resolución de la Ecuación de Schrödinger No Lineal
+                </h2>
+                <p class="text-xl max-w-4xl mx-auto mb-12 opacity-90">
+                    Exploración completa de la aplicación de PINNs para resolver la ecuación de Schrödinger no lineal,
+                    combinando el poder de las redes neuronales con las leyes fundamentales de la física.
+                </p>
+            </div>
+        </section>
+
+        <div class="container mx-auto px-6 space-y-20 pb-20">
+
+            <!-- Introducción -->
+            <section id="introduccion" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Introducción</h2>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6">¿Qué son las PINNs?</h3>
+                        <p class="text-gray-600 mb-6 text-lg leading-relaxed">
+                            Las Physics-Informed Neural Networks (PINNs) son una clase revolucionaria de redes neuronales 
+                            que incorporan ecuaciones diferenciales como restricciones durante el entrenamiento. 
+                            A diferencia de las redes neuronales tradicionales que solo aprenden de datos, 
+                            las PINNs combinan datos observacionales con leyes físicas conocidas.
+                        </p>
+                        <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-semibold text-blue-800 mb-3">Ventajas de las PINNs:</h4>
+                            <ul class="list-disc list-inside text-blue-700 space-y-2">
+                                <li>Menor dependencia de datos de entrenamiento</li>
+                                <li>Incorporación automática de leyes físicas</li>
+                                <li>Capacidad de interpolar y extrapolar con mayor precisión</li>
+                                <li>Solución de problemas inversos complejos</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="equation-card p-8">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Ecuación de Schrödinger No Lineal</h3>
+                        <div class="text-center text-2xl text-gray-800 mb-6">
+                            $$i h_t + \frac{1}{2} h_{xx} + |h|^2 h = 0$$
+                        </div>
+                        <p class="text-gray-600 text-center">
+                            Esta ecuación describe la evolución de ondas no lineales en diversos sistemas físicos, 
+                            desde óptica no lineal hasta condensados de Bose-Einstein.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Derivación Matemática -->
+            <section id="derivacion" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Derivación Matemática</h2>
+                
+                <div class="space-y-8">
+                    <div class="equation-card p-8">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6">Separación en Partes Real e Imaginaria</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-gray-600 mb-4">Comenzamos con la ecuación NLS en forma compleja:</p>
+                                <div class="text-center text-xl mb-6">
+                                    $$i h_t + \frac{1}{2} h_{xx} + |h|^2 h = 0$$
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p class="text-gray-600 mb-4">Separamos $h$ en sus componentes real e imaginaria:</p>
+                                <div class="text-center text-xl mb-6">
+                                    $$h(t, x) = u(t, x) + i v(t, x)$$
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h4 class="font-semibold text-gray-700 mb-4">Derivadas necesarias:</h4>
+                                <div class="grid md:grid-cols-2 gap-6 text-center">
+                                    <div>
+                                        $$h_t = u_t + i v_t$$
+                                        $$h_{xx} = u_{xx} + i v_{xx}$$
+                                    </div>
+                                    <div>
+                                        $$|h|^2 = u^2 + v^2$$
+                                        $$|h|^2 h = (u^2 + v^2)(u + i v)$$
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p class="text-gray-600 mb-4">Sustituyendo en la ecuación original y separando partes real e imaginaria:</p>
+                                <div class="bg-blue-50 p-6 rounded-lg">
+                                    <div class="text-center text-lg space-y-4">
+                                        <div class="font-semibold text-blue-800">Sistema de EDPs resultante:</div>
+                                        <div>
+                                            $$\begin{cases}
+                                            u_t = -\frac{1}{2} v_{xx} - (u^2 + v^2)v \\
+                                            v_t = \frac{1}{2} u_{xx} + (u^2 + v^2)u
+                                            \end{cases}$$
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Soluciones Analíticas -->
+            <section id="soluciones" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Soluciones Analíticas Exactas</h2>
+                
+                <div class="mb-8">
+                    <p class="text-lg text-gray-600 text-center max-w-4xl mx-auto">
+                        Para validar nuestro método PINN, utilizamos soluciones analíticas conocidas para diferentes 
+                        números de solitones. Estas soluciones nos permiten comparar cuantitativamente la precisión 
+                        de nuestra red neuronal.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="equation-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">Solución para N=1 (Solitón Individual)</h3>
+                        <div class="text-center text-lg mb-4">
+                            $$u(x,t) = \exp(-it/2) \cdot \text{sech}(x)$$
+                        </div>
+                        <p class="text-gray-600 text-sm text-center">
+                            Representa un solitón fundamental que mantiene su forma mientras se propaga.
+                        </p>
+                    </div>
+                    
+                    <div class="equation-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">Solución para N=2 (Dos Solitones)</h3>
+                        <div class="text-center text-lg mb-4">
+                            $$u(x,t) = 4\exp(-it/2) \frac{\cosh(3x) + 3\exp(-4it)\cosh(x)}{\cosh(4x) + 4\cosh(2x) + 3\cos(4t)}$$
+                        </div>
+                        <p class="text-gray-600 text-sm text-center">
+                            Describe la interacción compleja entre dos solitones.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Visualización Interactiva -->
+                <div class="bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+                    <div class="flex justify-center items-center mb-6 space-x-4">
+                        <span class="font-semibold text-gray-700">Explorar Solución:</span>
+                        <button id="btn-n1" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition-all duration-300">
+                            N=1 Solitón
+                        </button>
+                        <button id="btn-n2" class="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-md hover:bg-gray-300 transition-all duration-300">
+                            N=2 Solitón
+                        </button>
+                    </div>
+
+                    <div class="heatmap-container mx-auto mb-8" id="heatmap"></div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <label for="slider-t" class="block font-semibold text-gray-700 mb-2">
+                                Perfil Espacial en t = <span id="t-value">0.00</span>
+                            </label>
+                            <input type="range" id="slider-t" min="0" max="99" value="0" class="w-full mb-4">
+                            <div class="chart-container">
+                                <canvas id="spatialChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="slider-x" class="block font-semibold text-gray-700 mb-2">
+                                Evolución Temporal en x = <span id="x-value">0.00</span>
+                            </label>
+                            <input type="range" id="slider-x" min="0" max="99" value="50" class="w-full mb-4">
+                            <div class="chart-container">
+                                <canvas id="temporalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Teoría PINN -->
+            <section id="pinn-teoria" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Teoría de las PINNs</h2>
+                
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Arquitectura de la Red -->
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-2xl font-semibold text-gray-700 mb-6">Arquitectura de la Red Neuronal</h3>
+                            
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg">
+                                <div class="pinn-architecture mb-6">
+                                    <!-- Capa de entrada -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="text-sm font-semibold text-gray-600 mb-2">Entrada</div>
+                                        <div class="neuron-layer">
+                                            <div class="neuron bg-green-400"></div>
+                                            <div class="neuron bg-green-400"></div>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-2">(x, t)</div>
+                                    </div>
+                                    
+                                    <div class="connection"></div>
+                                    
+                                    <!-- Capas ocultas -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="text-sm font-semibold text-gray-600 mb-2">Ocultas</div>
+                                        <div class="neuron-layer">
+                                            <div class="neuron"></div>
+                                            <div class="neuron"></div>
+                                            <div class="neuron"></div>
+                                            <div class="neuron"></div>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-2">40 neuronas × 3</div>
+                                    </div>
+                                    
+                                    <div class="connection"></div>
+                                    
+                                    <!-- Capa de salida -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="text-sm font-semibold text-gray-600 mb-2">Salida</div>
+                                        <div class="neuron-layer">
+                                            <div class="neuron bg-red-400"></div>
+                                            <div class="neuron bg-red-400"></div>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-2">(u, v)</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center text-sm text-gray-600">
+                                    <p class="font-semibold mb-2">Configuración: [2, 40, 40, 40, 2]</p>
+                                    <p>Activación: tanh (capas ocultas), lineal (salida)</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="equation-card p-6">
+                            <h4 class="text-lg font-semibold text-gray-700 mb-4">Inicialización de Parámetros</h4>
+                            <div class="code-block p-4 text-sm">
+                                <pre>
+W ~ N(0, √(1/n_in))  # Pesos (Xavier-like)
+b ~ N(0, 1)          # Biases</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Función de Pérdida -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6">Función de Pérdida Compuesta</h3>
+                        
+                        <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500 mb-6">
+                            <p class="text-amber-800 font-semibold mb-2">La pérdida híbrida combina:</p>
+                            <ul class="list-disc list-inside text-amber-700 space-y-1">
+                                <li>Datos de condiciones iniciales y de contorno</li>
+                                <li>Residuos de las ecuaciones físicas</li>
+                                <li>Restricciones de periodicidad</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="text-lg font-medium text-center text-gray-800 mb-6">
+                                $$\mathcal{L}_{total} = \sum_{i=1}^{8} \mathcal{L}_i$$
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-blue-100 border border-blue-300">
+                                        <span class="font-mono text-sm">MSE(u₀ - u₀ᵖʳᵉᵈ)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Condición inicial para u
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-blue-100 border border-blue-300">
+                                        <span class="font-mono text-sm">MSE(v₀ - v₀ᵖʳᵉᵈ)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Condición inicial para v
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-green-100 border border-green-300">
+                                        <span class="font-mono text-sm">MSE(u_lb - u_ub)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Periodicidad de u en fronteras
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-green-100 border border-green-300">
+                                        <span class="font-mono text-sm">MSE(v_lb - v_ub)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Periodicidad de v en fronteras
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-purple-100 border border-purple-300">
+                                        <span class="font-mono text-sm">MSE(∂u/∂x_lb - ∂u/∂x_ub)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Periodicidad de derivada de u
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-purple-100 border border-purple-300">
+                                        <span class="font-mono text-sm">MSE(∂v/∂x_lb - ∂v/∂x_ub)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Periodicidad de derivada de v
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-red-100 border border-red-300">
+                                        <span class="font-mono text-sm">MSE(f_u)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Residuo de ecuación para u
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="has-tooltip relative">
+                                    <div class="loss-term bg-red-100 border border-red-300">
+                                        <span class="font-mono text-sm">MSE(f_v)</span>
+                                        <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-2 px-3 mb-2">
+                                            Residuo de ecuación para v
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Implementación -->
+            <section id="implementacion" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Implementación Detallada</h2>
+                
+                <div class="space-y-8">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="equation-card p-6">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">1. Función predict()</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Evalúa la red entrenada en puntos de prueba, devolviendo predicciones y residuos.
+                            </p>
+                            <div class="code-block p-3 text-xs">
+                                <pre>
+def predict(self, X_star):
+    # Entrada: (x,t) puntos
+    tf_dict = {
+        self.x0_tf: X_star[:, 0:1], 
+        self.t0_tf: X_star[:, 1:2]
+    }
+    
+    # Predecir u, v
+    u_star = self.sess.run(
+        self.u0_pred, tf_dict)
+    v_star = self.sess.run(
+        self.v0_pred, tf_dict)
+    
+    # Evaluar residuos
+    tf_dict = {
+        self.x_f_tf: X_star[:, 0:1],
+        self.t_f_tf: X_star[:, 1:2]
+    }
+    f_u_star = self.sess.run(
+        self.f_u_pred, tf_dict)
+    f_v_star = self.sess.run(
+        self.f_v_pred, tf_dict)
+    
+    return u_star, v_star, f_u_star, f_v_star</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="equation-card p-6">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">2. Inicialización de la Red</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Configura pesos y biases con inicialización Xavier para estabilidad.
+                            </p>
+                            <div class="code-block p-3 text-xs">
+                                <pre>
+def initialize_NN(self, layers):
+    weights = []
+    biases = []
+    num_layers = len(layers)
+    
+    for l in range(0, num_layers - 1):
+        W = tf.Variable(
+            tf.random_normal(
+                [layers[l], layers[l + 1]], 
+                stddev=np.sqrt(1/layers[l])
+            ),
+            dtype=tf.float32
+        )
+        
+        b = tf.Variable(
+            tf.random_normal(
+                [1, layers[l + 1]]
+            ), 
+            dtype=tf.float32
+        )
+        
+        weights.append(W)
+        biases.append(b)
+    
+    return weights, biases</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="equation-card p-6">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">3. Red Neuronal</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Forward pass con normalización de entrada y activación tanh.
+                            </p>
+                            <div class="code-block p-3 text-xs">
+                                <pre>
+def neural_net(self, X, weights, biases):
+    num_layers = len(weights) + 1
+    
+    # Normalización [-1, 1]
+    H = 2.0 * (X - self.lb) / (self.ub - self.lb) - 1.0
+    
+    # Forward pass
+    for l in range(0, num_layers - 2):
+        W = weights[l]
+        b = biases[l]
+        H = tf.tanh(tf.add(tf.matmul(H, W), b))
+    
+    # Capa de salida (sin activación)
+    W = weights[-1]
+    b = biases[-1]
+    Y = tf.add(tf.matmul(H, W), b)
+    
+    return Y</pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-indigo-50 to-blue-50 p-8 rounded-lg">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Flujo de Entrenamiento</h3>
+                        <div class="grid md:grid-cols-4 gap-6 text-center">
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">1</div>
+                                <h4 class="font-semibold text-gray-700 mb-2">Preparación de Datos</h4>
+                                <p class="text-sm text-gray-600">Generación de puntos de colocación y condiciones de contorno</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">2</div>
+                                <h4 class="font-semibold text-gray-700 mb-2">Optimización Adam</h4>
+                                <p class="text-sm text-gray-600">Entrenamiento inicial con 50,000 iteraciones</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="w-12 h-12 bg-purple-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">3</div>
+                                <h4 class="font-semibold text-gray-700 mb-2">Refinamiento L-BFGS-B</h4>
+                                <p class="text-sm text-gray-600">Optimización de segundo orden para convergencia fina</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <div class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">4</div>
+                                <h4 class="font-semibold text-gray-700 mb-2">Evaluación</h4>
+                                <p class="text-sm text-gray-600">Cálculo de errores relativos vs. solución exacta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resultados -->
+            <section id="resultados" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Resultados y Análisis</h2>
+                
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-semibold text-gray-700">Métricas de Rendimiento</h3>
+                        
+                        <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-semibold text-green-800 mb-3">Error Relativo L2</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-green-700">Error en u:</span>
+                                    <span class="font-mono text-green-800">≈ 10⁻³</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-green-700">Error en v:</span>
+                                    <span class="font-mono text-green-800">≈ 10⁻³</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-green-700">Error en |h|:</span>
+                                    <span class="font-mono text-green-800">≈ 10⁻³</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-semibold text-blue-800 mb-3">Ventajas del Método</h4>
+                            <ul class="list-disc list-inside text-blue-700 space-y-1">
+                                <li>No requiere discretización espacial o temporal</li>
+                                <li>Incorporación automática de leyes de conservación</li>
+                                <li>Capacidad de manejar geometrías complejas</li>
+                                <li>Robustez ante ruido en los datos</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-semibold text-gray-700">Comparación con Métodos Tradicionales</h3>
+                        
+                        <div class="overflow-hidden rounded-lg border border-gray-200">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Método</th>
+                                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Precisión</th>
+                                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Flexibilidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-4 py-3 font-medium">Diferencias Finitas</td>
+                                        <td class="px-4 py-3 text-yellow-600">Media</td>
+                                        <td class="px-4 py-3 text-red-600">Baja</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 font-medium">Elementos Finitos</td>
+                                        <td class="px-4 py-3 text-green-600">Alta</td>
+                                        <td class="px-4 py-3 text-yellow-600">Media</td>
+                                    </tr>
+                                    <tr class="bg-blue-50">
+                                        <td class="px-4 py-3 font-medium">PINNs</td>
+                                        <td class="px-4 py-3 text-green-600">Alta</td>
+                                        <td class="px-4 py-3 text-green-600">Muy Alta</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
+                            <h4 class="font-semibold text-amber-800 mb-3">Limitaciones Actuales</h4>
+                            <ul class="list-disc list-inside text-amber-700 space-y-1">
+                                <li>Tiempo de entrenamiento elevado</li>
+                                <li>Sensibilidad a hiperparámetros</li>
+                                <li>Dificultad con problemas altamente no lineales</li>
+                                <li>Necesidad de expertise en ML y física</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-4">Conclusiones</h3>
+                        <p class="text-lg max-w-4xl mx-auto">
+                            Las PINNs representan un paradigma revolucionario en la solución numérica de PDEs, 
+                            combinando eficazmente el aprendizaje automático con principios físicos fundamentales. 
+                            Su aplicación a la ecuación de Schrödinger no lineal demuestra su potencial para 
+                            abordar problemas complejos en física matemática con alta precisión y flexibilidad sin precedentes.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400">
+                © 2024 Proyecto PINNs para NLS - Análisis Computacional Avanzado
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Variables globales
+            let currentN = 1;
+            const x = Array.from({ length: 100 }, (_, i) => -5 + i * 10 / 99);
+            const t = Array.from({ length: 100 }, (_, i) => i * (Math.PI / 2) / 99);
+            
+            let data_n1 = [], data_n2 = [];
+            let spatialChart, temporalChart;
+
+            // Funciones matemáticas
+            function sech(val) {
+                return 1 / Math.cosh(val);
+            }
+
+            function magnitude_n1(x_val, t_val) {
+                return Math.pow(sech(x_val), 2);
+            }
+
+            function magnitude_n2(x_val, t_val) {
+                const num_real = Math.cosh(3 * x_val) + 3 * Math.cos(4 * t_val) * Math.cosh(x_val);
+                const num_imag = 3 * Math.sin(4 * t_val) * Math.cosh(x_val);
+                const den = Math.cosh(4 * x_val) + 4 * Math.cosh(2 * x_val) + 3 * Math.cos(4 * t_val);
+                const magnitude = 4 * Math.sqrt(num_real * num_real + num_imag * num_imag) / den;
+                return magnitude * magnitude;
+            }
+
+            // Generar datos
+            for (let j = 0; j < t.length; j++) {
+                const row1 = [], row2 = [];
+                for (let i = 0; i < x.length; i++) {
+                    row1.push(magnitude_n1(x[i], t[j]));
+                    row2.push(magnitude_n2(x[i], t[j]));
+                }
+                data_n1.push(row1);
+                data_n2.push(row2);
+            }
+
+            // Elementos del DOM
+            const tSlider = document.getElementById('slider-t');
+            const xSlider = document.getElementById('slider-x');
+            const tValue = document.getElementById('t-value');
+            const xValue = document.getElementById('x-value');
+            const btnN1 = document.getElementById('btn-n1');
+            const btnN2 = document.getElementById('btn-n2');
+
+            // Crear gráficos de línea
+            function createCharts() {
+                const spatialCtx = document.getElementById('spatialChart').getContext('2d');
+                spatialChart = new Chart(spatialCtx, {
+                    type: 'line',
+                    data: {
+                        labels: x.map(v => v.toFixed(1)),
+                        datasets: [{
+                            label: '|h(x,t)|²',
+                            data: [],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            pointRadius: 0,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            x: { title: { display: true, text: 'Posición (x)' } },
+                            y: { title: { display: true, text: 'Magnitud |h|²' } }
+                        }
+                    }
+                });
+
+                const temporalCtx = document.getElementById('temporalChart').getContext('2d');
+                temporalChart = new Chart(temporalCtx, {
+                    type: 'line',
+                    data: {
+                        labels: t.map(v => v.toFixed(2)),
+                        datasets: [{
+                            label: '|h(x,t)|²',
+                            data: [],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            fill: true,
+                            pointRadius: 0,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            x: { title: { display: true, text: 'Tiempo (t)' } },
+                            y: { title: { display: true, text: 'Magnitud |h|²' } }
+                        }
+                    }
+                });
+            }
+
+            // Actualizar mapa de calor
+            function updateHeatmap(n) {
+                const data = (n === 1) ? data_n1 : data_n2;
+                const title = `Magnitud |h(x,t)|² para N=${n} ${n === 1 ? '(Solitón Individual)' : '(Dos Solitones)'}`;
+                
+                Plotly.newPlot('heatmap', [{
+                    z: data,
+                    x: x,
+                    y: t,
+                    type: 'heatmap',
+                    colorscale: 'Viridis',
+                    colorbar: {
+                        title: '|h|²',
+                        titleside: 'right'
+                    }
+                }], {
+                    title: {
+                        text: title,
+                        font: { size: 16 }
+                    },
+                    xaxis: { 
+                        title: 'Posición (x)',
+                        showgrid: true
+                    },
+                    yaxis: { 
+                        title: 'Tiempo (t)',
+                        showgrid: true
+                    },
+                    margin: { t: 60, b: 50, l: 60, r: 80 }
+                });
+
+                // Evento de hover en el mapa de calor
+                document.getElementById('heatmap').on('plotly_hover', (data) => {
+                    if (data.points && data.points[0]) {
+                        const hoverX = data.points[0].x;
+                        const hoverT = data.points[0].y;
+                        
+                        const xIndex = x.findIndex(val => Math.abs(val - hoverX) < 0.1);
+                        const tIndex = t.findIndex(val => Math.abs(val - hoverT) < 0.02);
+                        
+                        if (xIndex !== -1 && tIndex !== -1) {
+                            xSlider.value = xIndex;
+                            tSlider.value = tIndex;
+                            updateLineCharts();
+                        }
+                    }
+                });
+            }
+
+            // Actualizar gráficos de línea
+            function updateLineCharts() {
+                const t_idx = parseInt(tSlider.value);
+                const x_idx = parseInt(xSlider.value);
+                const data = (currentN === 1) ? data_n1 : data_n2;
+
+                tValue.textContent = t[t_idx].toFixed(3);
+                xValue.textContent = x[x_idx].toFixed(2);
+
+                // Actualizar gráfico espacial
+                spatialChart.data.datasets[0].data = data[t_idx];
+                spatialChart.data.datasets[0].label = `|h(x,${t[t_idx].toFixed(3)})|² (N=${currentN})`;
+                spatialChart.update('none');
+
+                // Actualizar gráfico temporal
+                const temporalData = data.map(row => row[x_idx]);
+                temporalChart.data.datasets[0].data = temporalData;
+                temporalChart.data.datasets[0].label = `|h(${x[x_idx].toFixed(2)},t)|² (N=${currentN})`;
+                temporalChart.update('none');
+            }
+
+            // Event listeners para botones
+            btnN1.addEventListener('click', () => {
+                currentN = 1;
+                updateHeatmap(1);
+                updateLineCharts();
+                
+                btnN1.classList.remove('bg-gray-200', 'text-gray-700');
+                btnN1.classList.add('bg-blue-600', 'text-white');
+                btnN2.classList.remove('bg-blue-600', 'text-white');
+                btnN2.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            btnN2.addEventListener('click', () => {
+                currentN = 2;
+                updateHeatmap(2);
+                updateLineCharts();
+                
+                btnN2.classList.remove('bg-gray-200', 'text-gray-700');
+                btnN2.classList.add('bg-blue-600', 'text-white');
+                btnN1.classList.remove('bg-blue-600', 'text-white');
+                btnN1.classList.add('bg-gray-200', 'text-gray-700');
+            });
+
+            // Event listeners para sliders
+            tSlider.addEventListener('input', updateLineCharts);
+            xSlider.addEventListener('input', updateLineCharts);
+
+            // Navegación suave
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Inicialización
+            createCharts();
+            updateHeatmap(1);
+            updateLineCharts();
+
+            // Renderizar MathJax cuando esté listo
+            if (window.MathJax) {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax rendering complete');
+                }).catch((err) => console.log(err.message));
+            }
+        });
+    </script>
+</body>
+</html>
