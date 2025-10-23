@@ -694,15 +694,13 @@ def neural_net(self, X, weights, biases):
                         </div>
                     </div>
                 </div>
-            </section>
-
-        <!-- Section for Framework Comparison -->
+            </section>        <!-- Section for Framework Comparison -->
         <section id="comparacion" class="my-12">
             <div class="container mx-auto px-4">
                 <div class="section-card p-8 rounded-xl shadow-2xl space-y-8">
                     <h2 class="text-3xl font-bold text-gray-800 text-center">Comparativa de Frameworks</h2>
                     <p class="text-lg text-gray-700 max-w-3xl mx-auto text-center">
-                        Para evaluar la eficiencia y precisión de las Redes Neuronales Informadas por la Física (PINNs) en la resolución de la Ecuación de Schrödinger No Lineal, se implementó el modelo en tres entornos de desarrollo distintos: TensorFlow 1, TensorFlow 2 y PyTorch. A continuación, se presentan los resultados obtenidos.
+                        Para evaluar la eficiencia y precisión de las Redes Neuronales Informadas por la Física (PINNs) en la resolución de la Ecuación de Schrödinger No Lineal, se implementó el modelo con la <strong>misma arquitectura [2, 40, 40, 40, 2]</strong> en cuatro configuraciones diferentes: TensorFlow 1, TensorFlow 2, PyTorch y PyTorch Optimizado. A continuación, se presentan los resultados obtenidos.
                     </p>
         
                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
@@ -720,31 +718,45 @@ def neural_net(self, X, weights, biases):
                                     <thead class="bg-blue-500 text-white">
                                         <tr>
                                             <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Framework</th>
-                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Error Final (L-BFGS)</th>
-                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Tiempo de Entrenamiento (s)</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Error u</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Error v</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Error h</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Tiempo (s)</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-gray-700">
                                         <tr class="border-b">
                                             <td class="text-left py-3 px-4 font-medium">TensorFlow 1</td>
-                                            <td class="text-left py-3 px-4">0.00278</td>
-                                            <td class="text-left py-3 px-4">5023.85</td>
-                                        </tr>
-                                        <tr class="bg-gray-50 border-b">
+                                            <td class="text-left py-3 px-4">7.20e-03</td>
+                                            <td class="text-left py-3 px-4">1.14e-02</td>
+                                            <td class="text-left py-3 px-4">2.31e-03</td>
+                                            <td class="text-left py-3 px-4">362.24</td>
+                                        </tr>                                        <tr class="bg-gray-50 border-b">
                                             <td class="text-left py-3 px-4 font-medium">TensorFlow 2</td>
-                                            <td class="text-left py-3 px-4">0.00145</td>
-                                            <td class="text-left py-3 px-4">1546.84</td>
+                                            <td class="text-left py-3 px-4">3.10e-02</td>
+                                            <td class="text-left py-3 px-4">5.06e-02</td>
+                                            <td class="text-left py-3 px-4">7.72e-03</td>
+                                            <td class="text-left py-3 px-4">484.16</td>
                                         </tr>
-                                        <tr>
+                                        <tr class="border-b">
                                             <td class="text-left py-3 px-4 font-medium">PyTorch</td>
-                                            <td class="text-left py-3 px-4">0.00301</td>
+                                            <td class="text-left py-3 px-4">1.01e-02</td>
+                                            <td class="text-left py-3 px-4">1.53e-02</td>
+                                            <td class="text-left py-3 px-4">3.01e-03</td>
                                             <td class="text-left py-3 px-4">369.10</td>
+                                        </tr>
+                                        <tr class="bg-green-50 border-b border-green-200">
+                                            <td class="text-left py-3 px-4 font-medium text-green-800">PyTorch Optimizado</td>
+                                            <td class="text-left py-3 px-4 text-green-700">1.02e-02</td>
+                                            <td class="text-left py-3 px-4 text-green-700">1.58e-02</td>
+                                            <td class="text-left py-3 px-4 text-green-700">3.15e-03</td>
+                                            <td class="text-left py-3 px-4 font-bold text-green-700">280.87</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                              <p class="mt-4 text-gray-600">
-                                <strong>Análisis:</strong> TensorFlow 2 fue más rápido que TensorFlow 1, pero PyTorch fue el más rápido en tiempo de entrenamiento. El menor error final lo obtuvo TensorFlow 2, seguido de TensorFlow 1 y PyTorch.
+                                <strong>Análisis:</strong> Todas las implementaciones utilizaron la misma arquitectura de red neuronal [2, 40, 40, 40, 2]. TensorFlow 1 logró la mejor precisión con el error h más bajo (2.31e-03) en 362.24 segundos. PyTorch Optimizado ofreció el mejor balance entre velocidad y precisión, completando el entrenamiento en solo 280.87 segundos con errores comparables. TensorFlow 2 fue el más lento y presentó errores más altos. PyTorch estándar mostró un rendimiento intermedio tanto en tiempo como en precisión.
                             </p>
                         </div>
                     </div>
@@ -755,8 +767,415 @@ def neural_net(self, X, weights, biases):
                         <div class="bg-white/50 p-4 rounded-lg">
                             <canvas id="comparisonChart"></canvas>
                         </div>
+                    </div>                </div>
+            </div>
+        </section>        <!-- New Section: NLS 2-Soliton Interaction Results -->
+        <section id="nls-2soliton" class="my-12">
+            <div class="container mx-auto px-4">
+                <div class="section-card p-8 rounded-xl shadow-2xl space-y-8">
+                    <h2 class="text-3xl font-bold text-gray-800 text-center">Resultados: NLS con Interacción de 2 Solitones</h2>
+                    <p class="text-lg text-gray-700 max-w-3xl mx-auto text-center">
+                        Se implementó una PINN para resolver la ecuación de Schrödinger no lineal con interacción de dos solitones. 
+                        La arquitectura utilizada fue <strong>[2, 80, 80, 80, 80, 2]</strong> (más profunda que la variante anterior) 
+                        con 20,000 puntos de colocación para capturar la dinámica compleja de la interacción.
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+                        <!-- Static Image -->
+                        <div class="lg:col-span-2">
+                            <img src="nls_evolution.gif" alt="Comparación exacta vs predicha para 2 solitones" class="rounded-lg shadow-lg w-full">
+                            <p class="text-center text-sm mt-2 text-gray-600">
+                                Comparación de la solución exacta (azul) y la predicción de la PINN (rojo punteado) para la interacción de dos solitones.
+                            </p>
+                        </div>
+
+                        <!-- Results Table -->
+                        <div class="lg:col-span-3">
+                            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Comparativa de Implementaciones</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white rounded-lg shadow">
+                                    <thead class="bg-purple-500 text-white">
+                                        <tr>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Framework</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Error u</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Error v</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Error h</th>
+                                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Tiempo (s)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-gray-700">
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="text-left py-3 px-4 font-medium">TensorFlow 1</td>
+                                            <td class="text-left py-3 px-4">1.021e-02</td>
+                                            <td class="text-left py-3 px-4">1.175e-02</td>
+                                            <td class="text-left py-3 px-4 font-semibold text-green-600">7.299e-03</td>
+                                            <td class="text-left py-3 px-4">1723.09</td>
+                                        </tr>
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="text-left py-3 px-4 font-medium">PyTorch</td>
+                                            <td class="text-left py-3 px-4">1.979e-02</td>
+                                            <td class="text-left py-3 px-4">2.402e-02</td>
+                                            <td class="text-left py-3 px-4">1.046e-02</td>
+                                            <td class="text-left py-3 px-4">2565.47</td>
+                                        </tr>
+                                        <tr class="bg-green-50 border-b border-green-200 hover:bg-green-100">
+                                            <td class="text-left py-3 px-4 font-medium text-green-800">PyTorch Optimizado</td>
+                                            <td class="text-left py-3 px-4 text-green-700">1.259e-02</td>
+                                            <td class="text-left py-3 px-4 text-green-700">1.415e-02</td>
+                                            <td class="text-left py-3 px-4 text-green-700">9.215e-03</td>
+                                            <td class="text-left py-3 px-4 font-bold text-green-700">561.31</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="mt-4 text-gray-600">
+                                <strong>Análisis:</strong> Para el problema de 2 solitones con arquitectura [2, 80, 80, 80, 80, 2], 
+                                TensorFlow 1 logró la mejor precisión (error h: 7.299e-03) pero con el tiempo de entrenamiento más alto (1723s). 
+                                <strong>PyTorch Optimizado</strong> ofreció el mejor balance, alcanzando errores competitivos (9.215e-03) en solo 561 segundos, 
+                                3x más rápido que TensorFlow 1. PyTorch estándar fue el más lento (2565s) con errores intermedios.
+                            </p>
+                        </div>
                     </div>
-        
+
+                    <!-- Detailed Comparison Chart -->
+                    <div class="mt-8 pt-8 border-t border-gray-300">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Gráfica Comparativa: 2 Solitones</h3>
+                        <div class="bg-white/50 p-4 rounded-lg">
+                            <canvas id="comparison2SolitonChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Key Insights -->
+                    <div class="grid md:grid-cols-3 gap-6 mt-8">
+                        <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-semibold text-blue-800 mb-3 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                Mejor Precisión
+                            </h4>
+                            <p class="text-blue-700">
+                                <strong>TensorFlow 1:</strong> Error h de 7.299e-03, ideal cuando la precisión es crítica.
+                            </p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-semibold text-green-800 mb-3 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                                Mejor Velocidad
+                            </h4>
+                            <p class="text-green-700">
+                                <strong>PyTorch Optimizado:</strong> 561 segundos, 3x más rápido que TensorFlow 1 con buena precisión.
+                            </p>
+                        </div>
+                        <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
+                            <h4 class="font-semibold text-amber-800 mb-3 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/>
+                                </svg>
+                                Recomendación
+                            </h4>
+                            <p class="text-amber-700">
+                                Para producción: <strong>PyTorch Optimizado</strong>. Para investigación de alta precisión: <strong>TensorFlow 1</strong>.
+                            </p>
+                        </div>
+                    </div>                </div>
+            </div>
+        </section>
+
+        <!-- New Section: Análisis Comparativo de Métodos para Periodicidad -->
+        <section id="analisis-periodicidad" class="my-12">
+            <div class="container mx-auto px-4">
+                <div class="section-card p-8 rounded-xl shadow-2xl space-y-8">
+                    <h2 class="text-3xl font-bold text-gray-800 text-center">Análisis Comparativo: Tres Métodos PINN para Periodicidad Temporal</h2>
+                    
+                    <p class="text-lg text-gray-700 max-w-4xl mx-auto text-center">
+                        Se implementaron y compararon <strong>tres enfoques diferentes</strong> para manejar la periodicidad temporal 
+                        en PINNs aplicados a la ecuación NLS con N=2 solitones sobre el periodo extendido <strong>[0, 2π]</strong>. 
+                        Este análisis exhaustivo revela las fortalezas y limitaciones de cada método.
+                    </p>
+
+                    <!-- Los Tres Métodos -->
+                    <div class="grid md:grid-cols-3 gap-6 mt-8">
+                        <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                            <h3 class="text-xl font-semibold text-blue-800 mb-3">🌊 Método A: Fourier Features</h3>
+                            <p class="text-blue-700 text-sm mb-3">
+                                Codificación periódica del tiempo usando características de Fourier en la arquitectura de la red.
+                            </p>
+                            <ul class="text-blue-600 text-sm list-disc list-inside space-y-1">
+                                <li>4 frecuencias de Fourier</li>
+                                <li>Arquitectura: [2+8, 50, 50, 50, 50, 2]</li>
+                                <li>50,000 puntos de colocación</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                            <h3 class="text-xl font-semibold text-green-800 mb-3">🎯 Método B: Explicit Periodic Loss</h3>
+                            <p class="text-green-700 text-sm mb-3">
+                                Pérdida explícita que fuerza ψ(x,0) ≈ ψ(x,T) mediante un término adicional en la función de pérdida.
+                            </p>
+                            <ul class="text-green-600 text-sm list-disc list-inside space-y-1">
+                                <li>λ_periodic = 10.0</li>
+                                <li>Arquitectura: [2, 50, 50, 50, 50, 2]</li>
+                                <li>50,000 puntos de colocación</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
+                            <h3 class="text-xl font-semibold text-purple-800 mb-3">🔧 Método C: XPINN</h3>
+                            <p class="text-purple-700 text-sm mb-3">
+                                División del dominio temporal en subdominios con redes independientes y condiciones de interface.
+                            </p>
+                            <ul class="text-purple-600 text-sm list-disc list-inside space-y-1">
+                                <li>4 subdominios temporales</li>
+                                <li>Arquitectura: [2, 50, 50, 50, 2] × 4</li>
+                                <li>12,500 puntos/subdominio</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Tabla Comparativa de Resultados -->
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Resultados Cuantitativos</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white rounded-lg shadow">
+                                <thead class="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                                    <tr>
+                                        <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Método</th>
+                                        <th class="text-center py-3 px-4 uppercase font-semibold text-sm">Error u (L2)</th>
+                                        <th class="text-center py-3 px-4 uppercase font-semibold text-sm">Error v (L2)</th>
+                                        <th class="text-center py-3 px-4 uppercase font-semibold text-sm">Error |ψ| (L2)</th>
+                                        <th class="text-center py-3 px-4 uppercase font-semibold text-sm">Periodic u</th>
+                                        <th class="text-center py-3 px-4 uppercase font-semibold text-sm">Periodic |ψ|</th>
+                                        <th class="text-center py-3 px-4 uppercase font-semibold text-sm">Tiempo (min)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-700">
+                                    <tr class="border-b hover:bg-blue-50">
+                                        <td class="text-left py-3 px-4 font-medium">Método A (Fourier)</td>
+                                        <td class="text-center py-3 px-4">0.495</td>
+                                        <td class="text-center py-3 px-4">0.534</td>
+                                        <td class="text-center py-3 px-4">0.401</td>
+                                        <td class="text-center py-3 px-4 text-green-600 font-semibold">0.004</td>
+                                        <td class="text-center py-3 px-4">0.006</td>
+                                        <td class="text-center py-3 px-4 font-semibold">8.4</td>
+                                    </tr>
+                                    <tr class="bg-green-50 border-b border-green-200 hover:bg-green-100">
+                                        <td class="text-left py-3 px-4 font-medium text-green-800">Método B (Loss) ⭐</td>
+                                        <td class="text-center py-3 px-4">0.496</td>
+                                        <td class="text-center py-3 px-4">0.535</td>
+                                        <td class="text-center py-3 px-4">0.402</td>
+                                        <td class="text-center py-3 px-4 text-green-600 font-semibold">0.005</td>
+                                        <td class="text-center py-3 px-4 text-green-600 font-semibold">0.005</td>
+                                        <td class="text-center py-3 px-4">11.0</td>
+                                    </tr>
+                                    <tr class="border-b hover:bg-purple-50">
+                                        <td class="text-left py-3 px-4 font-medium">Método C (XPINN)</td>
+                                        <td class="text-center py-3 px-4 text-red-600">0.659</td>
+                                        <td class="text-center py-3 px-4 text-red-600">0.701</td>
+                                        <td class="text-center py-3 px-4 text-red-600">0.542</td>
+                                        <td class="text-center py-3 px-4 text-red-600">0.013</td>
+                                        <td class="text-center py-3 px-4 text-red-600">0.079</td>
+                                        <td class="text-center py-3 px-4 text-red-600">24.4</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mt-4 text-gray-600 text-center text-sm">
+                            ⭐ <strong>Método B (Explicit Periodic Loss)</strong> ofrece el mejor balance: 
+                            periodicidad comparable a Fourier, simple de implementar, y tiempo razonable.
+                        </p>
+                    </div>
+
+                    <!-- Gráficas Comparativas -->
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Comparación Visual de Errores</h3>
+                        <div class="bg-white/50 p-4 rounded-lg">
+                            <canvas id="periodicityComparisonChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Análisis de Periodicidad -->
+                    <div class="mt-12 border-t pt-12">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Verificación de Periodicidad: t=0 vs t=2π</h3>
+                        <p class="text-gray-700 mb-6 text-center max-w-3xl mx-auto">
+                            Un criterio fundamental es que la solución predicha debe satisfacer <strong>ψ(x, 0) = ψ(x, 2π)</strong>. 
+                            A continuación se muestra el error de periodicidad para cada método.
+                        </p>
+                        <div class="bg-white/50 p-4 rounded-lg">
+                            <canvas id="periodicityErrorChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Diagnóstico de Problemas -->
+                    <div class="mt-12 bg-red-50 p-8 rounded-lg border-l-4 border-red-500">
+                        <h3 class="text-2xl font-semibold text-red-800 mb-6">🔍 Diagnóstico: ¿Por qué Ningún Método Funcionó Bien?</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-lg font-semibold text-red-700 mb-2">❌ Problema 1: Errores L2 Muy Altos (> 0.4)</h4>
+                                <p class="text-red-600">
+                                    Todos los métodos tienen errores relativos superiores al 40%, lo cual indica que <strong>no capturan 
+                                    correctamente la solución</strong>. La ecuación NLS N=2 es extremadamente no lineal y requiere 
+                                    arquitecturas más profundas.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-red-700 mb-2">❌ Problema 2: Periodicidad No Capturada</h4>
+                                <p class="text-red-600">
+                                    Aunque los errores de periodicidad son bajos (~0.5-1.3%), <strong>esto es engañoso</strong> porque 
+                                    la solución base ya está muy lejos de la correcta. Una periodicidad "buena" sobre una solución 
+                                    incorrecta no tiene valor.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-red-700 mb-2">❌ Problema 3: Causas Identificadas</h4>
+                                <ul class="list-disc list-inside text-red-600 space-y-1 ml-4">
+                                    <li>Redes poco profundas (4-5 capas de 50 neuronas)</li>
+                                    <li>Fourier: Solo 4 frecuencias (insuficiente para [0, 2π])</li>
+                                    <li>Loss: λ_periodic = 10 muy bajo (dominado por PDE)</li>
+                                    <li>XPINN: Discontinuidades en interfaces</li>
+                                    <li>Pocas épocas de convergencia (~30,000)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Propuestas de Mejora -->
+                    <div class="mt-12 bg-green-50 p-8 rounded-lg border-l-4 border-green-500">
+                        <h3 class="text-2xl font-semibold text-green-800 mb-6">💡 Propuestas de Mejora</h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Propuesta 1: Método Híbrido -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">1</span>
+                                    <h4 class="text-lg font-semibold text-green-800">Método Híbrido (PRIORIDAD ALTA)</h4>
+                                </div>
+                                <p class="text-green-700 text-sm mb-3">
+                                    Combinar Fourier Features + Explicit Periodic Loss:
+                                </p>
+                                <ul class="text-green-600 text-sm list-disc list-inside space-y-1">
+                                    <li>10-12 frecuencias de Fourier (vs 4)</li>
+                                    <li>λ_periodic = 200-500 (vs 10)</li>
+                                    <li>Arquitectura: [26, 100, 100, 100, 100, 2]</li>
+                                    <li>50,000+ puntos de colocación</li>
+                                    <li>30,000 épocas Adam + 5,000 L-BFGS</li>
+                                </ul>
+                            </div>
+
+                            <!-- Propuesta 2: Curriculum Learning -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">2</span>
+                                    <h4 class="text-lg font-semibold text-blue-800">Curriculum Learning</h4>
+                                </div>
+                                <p class="text-blue-700 text-sm mb-3">
+                                    Entrenar progresivamente en dominios crecientes:
+                                </p>
+                                <ul class="text-blue-600 text-sm list-disc list-inside space-y-1">
+                                    <li>Fase 1: [0, π/2] → 5,000 épocas</li>
+                                    <li>Fase 2: [0, π] → 5,000 épocas</li>
+                                    <li>Fase 3: [0, 3π/2] → 5,000 épocas</li>
+                                    <li>Fase 4: [0, 2π] → 10,000 épocas</li>
+                                </ul>
+                            </div>
+
+                            <!-- Propuesta 3: Physics-Guided Sampling -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">3</span>
+                                    <h4 class="text-lg font-semibold text-purple-800">Physics-Guided Sampling</h4>
+                                </div>
+                                <p class="text-purple-700 text-sm mb-3">
+                                    Concentrar puntos donde la física es más compleja:
+                                </p>
+                                <ul class="text-purple-600 text-sm list-disc list-inside space-y-1">
+                                    <li>Más puntos donde |ψ|² es grande</li>
+                                    <li>Muestreo adaptativo en colisiones</li>
+                                    <li>30% guiado por energía, 70% uniforme</li>
+                                </ul>
+                            </div>
+
+                            <!-- Propuesta 4: Adaptive Weighting -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <div class="flex items-center mb-3">
+                                    <span class="bg-amber-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">4</span>
+                                    <h4 class="text-lg font-semibold text-amber-800">Adaptive Weighting</h4>
+                                </div>
+                                <p class="text-amber-700 text-sm mb-3">
+                                    Ponderación dinámica de pérdidas:
+                                </p>
+                                <ul class="text-amber-600 text-sm list-disc list-inside space-y-1">
+                                    <li>Identificar regiones con error alto</li>
+                                    <li>Aumentar peso de pérdida ahí</li>
+                                    <li>Actualizar pesos cada 500 épocas</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ranking Final -->
+                    <div class="mt-12 bg-gradient-to-r from-yellow-50 to-amber-50 p-8 rounded-lg border-2 border-amber-300">
+                        <h3 class="text-2xl font-semibold text-amber-800 mb-6 text-center">🏆 Ranking Final de Métodos</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center bg-white p-4 rounded-lg shadow">
+                                <span class="text-4xl mr-4">🥈</span>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-800">2º Lugar: Método B (Explicit Periodic Loss)</h4>
+                                    <p class="text-gray-600 text-sm">
+                                        <strong>Mejor periodicidad</strong> (0.005), <strong>simple</strong> de implementar, 
+                                        <strong>base recomendada</strong> para mejoras futuras. Tiempo razonable: 11 min.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center bg-white p-4 rounded-lg shadow">
+                                <span class="text-4xl mr-4">🥉</span>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-800">3º Lugar: Método A (Fourier Features)</h4>
+                                    <p class="text-gray-600 text-sm">
+                                        <strong>Concepto elegante</strong>, más rápido (8.4 min), pero necesita más frecuencias 
+                                        para capturar [0, 2π]. Potencial alto con mejoras.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center bg-gray-100 p-4 rounded-lg shadow">
+                                <span class="text-4xl mr-4">❌</span>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-800">Último: Método C (XPINN)</h4>
+                                    <p class="text-gray-600 text-sm">
+                                        <strong>Peor error</strong> (0.701), <strong>lento</strong> (24 min), 
+                                        <strong>discontinuidades</strong> visibles. No justifica la complejidad adicional.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conclusiones -->
+                    <div class="mt-12 border-t pt-8">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">📝 Conclusiones del Análisis Comparativo</h3>
+                        <div class="max-w-4xl mx-auto space-y-4 text-gray-700">
+                            <p class="leading-relaxed">
+                                <strong>1. Ningún método funcionó satisfactoriamente</strong> para el problema NLS N=2 periódico en [0, 2π]. 
+                                Los errores L2 superiores al 40% indican que las soluciones predichas están muy lejos de las exactas.
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong>2. El Método B (Explicit Periodic Loss) es la mejor base</strong> para futuras mejoras debido a su 
+                                simplicidad, buen control de periodicidad, y tiempo de entrenamiento razonable.
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong>3. El problema es extremadamente difícil:</strong> La ecuación NLS N=2 es altamente no lineal con 
+                                interacciones complejas entre solitones, cambios de fase rápidos, y múltiples escalas temporales.
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong>4. Próximo paso recomendado:</strong> Implementar el <strong>Método Híbrido</strong> que combine 
+                                Fourier Features (12 frecuencias) + Explicit Periodic Loss (λ=300) + Curriculum Learning + Arquitectura 
+                                más profunda [26, 100, 100, 100, 100, 2].
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -1117,17 +1536,16 @@ if __name__ == "__main__":
             const comparisonChart = new Chart(ctxComparison, {
                 type: 'bar',
                 data: {
-                    labels: ['TensorFlow 1', 'TensorFlow 2', 'PyTorch'],
-                    datasets: [{
+                    labels: ['TensorFlow 1', 'TensorFlow 2', 'PyTorch', 'PyTorch Optimizado'],                    datasets: [{
                         label: 'Tiempo de Entrenamiento (s)',
-                        data: [5023.85, 1546.84, 369.10],
+                        data: [362.24, 484.16, 369.10, 280.87],
                         backgroundColor: 'rgba(59, 130, 246, 0.7)', // blue-500
                         borderColor: 'rgba(30, 64, 175, 1)', // blue-800
                         borderWidth: 1,
                         yAxisID: 'yTime',
                     }, {
-                        label: 'Error Final (L-BFGS)',
-                        data: [0.00278, 0.00145, 0.00301],
+                        label: 'Error h (Error Total)',
+                        data: [0.00231, 0.00772, 0.00301, 0.003146],
                         backgroundColor: 'rgba(239, 68, 68, 0.7)', // red-500
                         borderColor: 'rgba(153, 27, 27, 1)', // red-800
                         borderWidth: 1,
@@ -1189,9 +1607,288 @@ if __name__ == "__main__":
                         }
                     }
                 }
+            });            // --- 2-Soliton Comparison Chart ---
+            const ctx2Soliton = document.getElementById('comparison2SolitonChart').getContext('2d');
+            const comparison2SolitonChart = new Chart(ctx2Soliton, {
+                type: 'bar',
+                data: {
+                    labels: ['TensorFlow 1', 'PyTorch', 'PyTorch Optimizado'],
+                    datasets: [{
+                        label: 'Tiempo de Entrenamiento (s)',
+                        data: [1723.09, 2565.47, 561.31],
+                        backgroundColor: 'rgba(147, 51, 234, 0.7)', // purple-600
+                        borderColor: 'rgba(88, 28, 135, 1)', // purple-900
+                        borderWidth: 1,
+                        yAxisID: 'yTime',
+                    }, {
+                        label: 'Error h (Error Total)',
+                        data: [0.007299, 0.01046, 0.009215],
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)', // red-500
+                        borderColor: 'rgba(153, 27, 27, 1)', // red-800
+                        borderWidth: 1,
+                        yAxisID: 'yLoss',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        yTime: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Tiempo (s)',
+                                color: 'rgba(88, 28, 135, 1)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        },
+                        yLoss: {
+                            type: 'logarithmic',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Error h (Escala Log)',
+                                color: 'rgba(153, 27, 27, 1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        if (context.dataset.yAxisID === 'yLoss') {
+                                           label += context.parsed.y.toExponential(4);
+                                        } else {
+                                           label += context.parsed.y.toFixed(2) + ' s';
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }            });
+        });
+
+        // --- Periodicity Comparison Charts ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chart 1: Comparación de Errores L2 y Periodicidad
+            const ctxPeriodicityComparison = document.getElementById('periodicityComparisonChart').getContext('2d');
+            const periodicityComparisonChart = new Chart(ctxPeriodicityComparison, {
+                type: 'bar',
+                data: {
+                    labels: ['Método A\n(Fourier)', 'Método B\n(Loss)', 'Método C\n(XPINN)'],
+                    datasets: [
+                        {
+                            label: 'Error u (L2)',
+                            data: [0.495, 0.496, 0.659],
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(30, 64, 175, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Error v (L2)',
+                            data: [0.534, 0.535, 0.701],
+                            backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                            borderColor: 'rgba(153, 27, 27, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Error |ψ| (L2)',
+                            data: [0.401, 0.402, 0.542],
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: 'rgba(5, 150, 105, 1)',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Comparación de Errores Relativos L2',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(3);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Error Relativo L2',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(2);
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Método PINN',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Error de Periodicidad
+            const ctxPeriodicityError = document.getElementById('periodicityErrorChart').getContext('2d');
+            const periodicityErrorChart = new Chart(ctxPeriodicityError, {
+                type: 'bar',
+                data: {
+                    labels: ['Método A\n(Fourier)', 'Método B\n(Loss)', 'Método C\n(XPINN)'],
+                    datasets: [
+                        {
+                            label: 'Error Periódico u',
+                            data: [0.004, 0.005, 0.013],
+                            backgroundColor: 'rgba(147, 51, 234, 0.7)',
+                            borderColor: 'rgba(88, 28, 135, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Error Periódico |ψ|',
+                            data: [0.006, 0.005, 0.079],
+                            backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                            borderColor: 'rgba(180, 83, 9, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Tiempo (min)',
+                            data: [8.4, 11.0, 24.4],
+                            backgroundColor: 'rgba(107, 114, 128, 0.5)',
+                            borderColor: 'rgba(55, 65, 81, 1)',
+                            borderWidth: 2,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Errores de Periodicidad y Tiempo de Entrenamiento',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.dataset.yAxisID === 'y1') {
+                                        label += context.parsed.y.toFixed(1) + ' min';
+                                    } else {
+                                        label += context.parsed.y.toFixed(3);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'logarithmic',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Error de Periodicidad (escala log)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toExponential(1);
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Tiempo de Entrenamiento (min)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(1);
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Método PINN',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
             });
         });
     </script>
 </body>
 </html>
 `
+
