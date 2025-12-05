@@ -1204,17 +1204,16 @@ def neural_net(self, X, weights, biases):
                                 más profunda [26, 100, 100, 100, 100, 2].
                             </p>
                         </div>
-                    </div>
-
-                </div>
+                    </div>                </div>
             </div>            </section>
 
             <section id="xpinn-results" class="section-card p-12">
-                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Resultados de XPINN Mejorado</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Resultados de XPINN Mejorado (NLS 2° Orden)</h2>
                 <div class="max-w-4xl mx-auto space-y-8">
                     <p class="text-lg text-gray-700 text-center">
                         Después de identificar y corregir los errores de indexación en el intervalo [π/2, π], 
-                        se implementó una versión mejorada de XPINN que logró una convergencia significativamente mejor.
+                        se implementó una versión mejorada de XPINN que logró una convergencia significativamente mejor 
+                        para la ecuación NLS de segundo orden.
                     </p>
 
                     <div class="grid md:grid-cols-2 gap-8">
@@ -1523,6 +1522,385 @@ def neural_net(self, X, weights, biases):
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <!-- New Section: 3rd Order NLS - Hirota Method -->
+            <section id="nls-3order-hirota" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">NLS de Tercer Orden: Método de Hirota</h2>
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <p class="text-lg text-gray-700 text-center">
+                        La ecuación de Schrödinger no lineal de tercer orden con el método de Hirota incluye dispersión de tercer orden 
+                        y términos no lineales adicionales que modelan fenómenos físicos más complejos.
+                    </p>
+
+                    <!-- Ecuación NLS 3rd Order Hirota -->
+                    <div class="equation-card p-8">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Ecuación de Tercer Orden (Hirota)</h3>
+                        <div class="text-center text-2xl text-gray-800 mb-6">
+                            $$iq_t + \frac{1}{2}D_2 q_{xx} + R_2|q|^2 q + iD_3 q_{xxx} + 6iR_3|q|^2 q_x = 0$$
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg mt-4">
+                            <h4 class="font-semibold text-blue-800 mb-3">Parámetros del Método de Hirota:</h4>
+                            <div class="grid md:grid-cols-2 gap-4 text-blue-700">
+                                <div>
+                                    <p><strong>D₂ = 1.0</strong> (Dispersión de segundo orden)</p>
+                                    <p><strong>D₃ = 0.1</strong> (Dispersión de tercer orden)</p>
+                                </div>
+                                <div>
+                                    <p><strong>R₂ = 1.0</strong> (No linealidad de segundo orden)</p>
+                                    <p><strong>R₃ = 0.1</strong> (No linealidad de tercer orden)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg mt-4">
+                            <h4 class="font-semibold text-green-800 mb-3">Sistema de EDPs Acopladas (Real/Imaginaria):</h4>
+                            <div class="text-center text-lg space-y-2">
+                                $$\begin{cases}
+                                u_t = -\frac{1}{2}D_2 v_{xx} - R_2(u^2 + v^2)v + D_3 v_{xxx} + 6R_3(u^2 + v^2)v_x \\
+                                v_t = \frac{1}{2}D_2 u_{xx} + R_2(u^2 + v^2)u + D_3 u_{xxx} + 6R_3(u^2 + v^2)u_x
+                                \end{cases}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resultados -->
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Configuración XPINN</h3>
+                            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                <li>Arquitectura: [2, 120, 120, 120, 120, 120, 120, 2]</li>
+                                <li>Subdominios: 4 (temporales)</li>
+                                <li>Puntos IC: 250 por subdominio</li>
+                                <li>Puntos BC: 250 por subdominio</li>
+                                <li>Puntos PDE: 25,000 por subdominio</li>
+                                <li>Optimización: Adam (15k épocas) + L-BFGS</li>
+                            </ul>
+                        </div>                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Resultados Cuantitativos</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Error L2 en Re(q):</span>
+                                    <span class="font-mono text-amber-600">5.62e-02</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Error L2 en Im(q):</span>
+                                    <span class="font-mono text-amber-600">5.94e-02</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Error L2 en |q|:</span>
+                                    <span class="font-mono text-amber-600">2.01e-02</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Tiempo de Entrenamiento:</span>
+                                    <span class="font-mono text-blue-600">~3.5 horas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visualizaciones -->
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Visualización de Resultados</h3>
+                        
+                        <!-- Comparación completa -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-blue-200">
+                                <img src="xpinn_hirota_comparison.png" alt="Comparación completa Hirota" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Comparación Completa: Soluciones Exactas vs XPINN (Método Hirota)
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Las tres filas muestran |q|, Re(q) e Im(q) respectivamente. Las columnas muestran: exacto, XPINN, y error absoluto.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- GIF -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-green-200">
+                                <img src="xpinn_hirota_evolution.gif" alt="Evolución temporal Hirota" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Evolución Temporal de |q(x,t)| - Método de Hirota
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Comparación dinámica entre solución exacta (azul) y predicción XPINN (rojo punteado)
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Superficies 3D -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-purple-200">
+                                <img src="xpinn_hirota_3d_surfaces.png" alt="Superficies 3D Hirota" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Visualización 3D de Soluciones (Hirota)
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Superficies 3D mostrando |q| exacto, predicho y el error
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Pérdidas de entrenamiento -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-amber-200">
+                                <img src="xpinn_hirota_losses.png" alt="Pérdidas Hirota" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Evolución de las Pérdidas Durante el Entrenamiento
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Pérdida total, condición inicial y residuo de PDE para cada subdominio
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6">Observaciones del Método de Hirota</h3>
+                        <div class="grid md:grid-cols-2 gap-6">                            <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
+                                <h4 class="font-semibold text-amber-800 mb-3">Ventajas</h4>
+                                <ul class="list-disc list-inside text-amber-700 space-y-1">
+                                    <li>Captura efectivamente la dispersión de tercer orden</li>
+                                    <li>Errores L2 moderados (~2-6%)</li>
+                                    <li>Arquitectura profunda mejora la aproximación</li>
+                                    <li>Conservación de invariantes físicas</li>
+                                </ul>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-semibold text-blue-800 mb-3">Características</h4>
+                                <ul class="list-disc list-inside text-blue-700 space-y-1">
+                                    <li>Términos D₃ y R₃ añaden complejidad física</li>
+                                    <li>Mayor número de derivadas requiere más puntos</li>
+                                    <li>Interacción entre dispersión y no linealidad</li>
+                                    <li>Tiempo de entrenamiento significativo (3.5 horas)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- New Section: 3rd Order NLS - cMKdV Method -->
+            <section id="nls-3order-cmkdv" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">NLS de Tercer Orden: Método cMKdV</h2>
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <p class="text-lg text-gray-700 text-center">
+                        La ecuación de Schrödinger no lineal acoplada al modelo Korteweg-de Vries modificado (cMKdV) elimina 
+                        los términos de segundo orden, enfocándose únicamente en la dispersión y no linealidad de tercer orden.
+                    </p>
+
+                    <!-- Ecuación NLS 3rd Order cMKdV -->
+                    <div class="equation-card p-8">
+                        <h3 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Ecuación de Tercer Orden (cMKdV)</h3>
+                        <div class="text-center text-2xl text-gray-800 mb-6">
+                            $$iq_t + iD_3 q_{xxx} + 6iR_3|q|^2 q_x = 0$$
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg mt-4">
+                            <h4 class="font-semibold text-blue-800 mb-3">Parámetros del Método cMKdV:</h4>
+                            <div class="grid md:grid-cols-2 gap-4 text-blue-700">
+                                <div>
+                                    <p><strong>D₂ = 0.0</strong> (Sin dispersión de 2° orden)</p>
+                                    <p><strong>D₃ = 0.1</strong> (Dispersión de tercer orden)</p>
+                                </div>
+                                <div>
+                                    <p><strong>R₂ = 0.0</strong> (Sin no linealidad de 2° orden)</p>
+                                    <p><strong>R₃ = 0.1</strong> (No linealidad de tercer orden)</p>
+                                </div>
+                            </div>
+                            <p class="text-blue-600 mt-3 text-center italic">
+                                Modelo puro de tercer orden sin contribuciones de segundo orden
+                            </p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg mt-4">
+                            <h4 class="font-semibold text-green-800 mb-3">Sistema de EDPs Acopladas (Real/Imaginaria):</h4>
+                            <div class="text-center text-lg space-y-2">
+                                $$\begin{cases}
+                                u_t = D_3 v_{xxx} + 6R_3(u^2 + v^2)v_x \\
+                                v_t = -D_3 u_{xxx} - 6R_3(u^2 + v^2)u_x
+                                \end{cases}$$
+                            </div>
+                            <p class="text-green-600 mt-3 text-center text-sm">
+                                Nótese la ausencia de términos q_xx, característico del modelo cMKdV
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Resultados -->
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Configuración XPINN</h3>
+                            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                <li>Arquitectura: [2, 80, 80, 80, 80, 80, 80, 2]</li>
+                                <li>Subdominios: 4 (temporales)</li>
+                                <li>Puntos IC: 250 por subdominio</li>
+                                <li>Puntos BC: 250 por subdominio</li>
+                                <li>Puntos PDE: 20,000 por subdominio</li>
+                                <li>Optimización: Adam (15k épocas) + L-BFGS</li>
+                            </ul>
+                        </div>                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Resultados Cuantitativos</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Error L2 en Re(q):</span>
+                                    <span class="font-mono text-amber-600">5.17e-02</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Error L2 en Im(q):</span>
+                                    <span class="font-mono text-amber-600">5.87e-02</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Error L2 en |q|:</span>
+                                    <span class="font-mono text-amber-600">1.86e-02</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Tiempo de Entrenamiento:</span>
+                                    <span class="font-mono text-blue-600">~2 horas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visualizaciones -->
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Visualización de Resultados</h3>
+                        
+                        <!-- Comparación completa -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-blue-200">
+                                <img src="xpinn_cMKdV_comparison.png" alt="Comparación completa cMKdV" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Comparación Completa: Soluciones Exactas vs XPINN (Método cMKdV)
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Las tres filas muestran |q|, Re(q) e Im(q) respectivamente. Las columnas muestran: exacto, XPINN, y error absoluto.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- GIF -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-green-200">
+                                <img src="xpinn_cMKdV_evolution.gif" alt="Evolución temporal cMKdV" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Evolución Temporal de |q(x,t)| - Método cMKdV
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Comparación dinámica entre solución exacta (azul) y predicción XPINN (rojo punteado)
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Superficies 3D -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-purple-200">
+                                <img src="xpinn_cMKdV_3d_surfaces.png" alt="Superficies 3D cMKdV" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Visualización 3D de Soluciones (cMKdV)
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Superficies 3D mostrando |q| exacto, predicho y el error
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Pérdidas de entrenamiento -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-amber-200">
+                                <img src="xpinn_cMKdV_losses.png" alt="Pérdidas cMKdV" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Evolución de las Pérdidas Durante el Entrenamiento
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Pérdida total, condición inicial y residuo de PDE para cada subdominio
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Análisis de Error -->
+                        <div class="mb-8">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-red-200">
+                                <img src="xpinn_cMKdV_error_analysis.png" alt="Análisis de error cMKdV" class="w-full rounded-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Análisis Espacial y Temporal del Error
+                                </p>
+                                <p class="text-base text-gray-600 mt-3 text-center">
+                                    Distribución del error en función del espacio, tiempo, y por subdominio
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6">Observaciones del Método cMKdV</h3>
+                        <div class="grid md:grid-cols-2 gap-6">                            <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                                <h4 class="font-semibold text-green-800 mb-3">Ventajas</h4>
+                                <ul class="list-disc list-inside text-green-700 space-y-1">
+                                    <li>Modelo matemáticamente más simple (solo tercer orden)</li>
+                                    <li>Entrenamiento más rápido que Hirota (~2 horas vs 3.5 horas)</li>
+                                    <li>Menor número de términos en la PDE</li>
+                                    <li>Útil para estudios de dispersión pura</li>
+                                </ul>
+                            </div>
+                            <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
+                                <h4 class="font-semibold text-amber-800 mb-3">Desafíos</h4>
+                                <ul class="list-disc list-inside text-amber-700 space-y-1">
+                                    <li>Errores moderados comparables a Hirota (~2-6%)</li>
+                                    <li>Ausencia de término q_xx reduce estabilidad numérica</li>
+                                    <li>Requiere muchos puntos de colocación</li>
+                                    <li>Sensible a la inicialización de pesos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparación Hirota vs cMKdV -->
+                    <div class="mt-12 bg-gradient-to-r from-indigo-50 to-purple-50 p-8 rounded-lg border-2 border-indigo-300">
+                        <h3 class="text-2xl font-semibold text-indigo-800 mb-6 text-center">⚖️ Comparación: Hirota vs cMKdV</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full bg-white rounded-lg shadow overflow-hidden">
+                                <thead class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left">Aspecto</th>
+                                        <th class="px-4 py-3 text-center">Hirota (D₂≠0, R₂≠0)</th>
+                                        <th class="px-4 py-3 text-center">cMKdV (D₂=0, R₂=0)</th>
+                                    </tr>
+                                </thead>                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Error L2 en |q|</td>
+                                        <td class="px-4 py-3 text-center text-amber-600">2.01e-02</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">1.86e-02 ✅</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Tiempo de Entrenamiento</td>
+                                        <td class="px-4 py-3 text-center">~3.5 horas</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">~2 horas ✅</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Arquitectura</td>
+                                        <td class="px-4 py-3 text-center">[2,120,120,120,120,120,120,2]</td>
+                                        <td class="px-4 py-3 text-center">[2,80,80,80,80,80,80,2]</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Términos en PDE</td>
+                                        <td class="px-4 py-3 text-center">5 términos (completa)</td>
+                                        <td class="px-4 py-3 text-center">2 términos (simplificada)</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Aplicación Física</td>
+                                        <td class="px-4 py-3 text-center">Óptica no lineal general</td>
+                                        <td class="px-4 py-3 text-center">Ondas en aguas profundas</td>
+                                    </tr>
+                                    <tr class="bg-indigo-50 hover:bg-indigo-100">
+                                        <td class="px-4 py-3 font-medium">Recomendación</td>
+                                        <td class="px-4 py-3 text-center text-amber-700 font-semibold">Modelo completo (pero costoso)</td>
+                                        <td class="px-4 py-3 text-center text-green-700 font-semibold">Mejor balance precisión/tiempo ✅</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>                </div>
             </section>
 
              <section id="conclusion" class="section-card p-12">
