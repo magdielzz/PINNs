@@ -1580,19 +1580,19 @@ def neural_net(self, X, weights, biases):
                             <div class="space-y-2">
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Error L2 en Re(q):</span>
-                                    <span class="font-mono text-amber-600">5.62e-02</span>
+                                    <span class="font-mono text-green-600">3.62e-03</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Error L2 en Im(q):</span>
-                                    <span class="font-mono text-amber-600">5.94e-02</span>
+                                    <span class="font-mono text-green-600">3.00e-03</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Error L2 en |q|:</span>
-                                    <span class="font-mono text-amber-600">2.01e-02</span>
+                                    <span class="font-mono text-green-600">1.80e-03</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Tiempo de Entrenamiento:</span>
-                                    <span class="font-mono text-blue-600">~3.5 horas</span>
+                                    <span class="font-mono text-blue-600">~2.0 horas</span>
                                 </div>
                             </div>
                         </div>
@@ -1658,22 +1658,21 @@ def neural_net(self, X, weights, biases):
                     <!-- Observaciones -->
                     <div class="mt-8">
                         <h3 class="text-2xl font-semibold text-gray-800 mb-6">Observaciones del Método de Hirota</h3>
-                        <div class="grid md:grid-cols-2 gap-6">                            <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
-                                <h4 class="font-semibold text-amber-800 mb-3">Ventajas</h4>
-                                <ul class="list-disc list-inside text-amber-700 space-y-1">
+                        <div class="grid md:grid-cols-2 gap-6">                            <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                                <h4 class="font-semibold text-green-800 mb-3">Ventajas</h4>
+                                <ul class="list-disc list-inside text-green-700 space-y-1">
                                     <li>Captura efectivamente la dispersión de tercer orden</li>
-                                    <li>Errores L2 moderados (~2-6%)</li>
-                                    <li>Arquitectura profunda mejora la aproximación</li>
-                                    <li>Conservación de invariantes físicas</li>
+                                    <li><strong>Errores L2 excelentes (~0.18-0.36%)</strong> ✅</li>
+                                    <li>Arquitectura profunda mejora significativamente la aproximación</li>
+                                    <li>Conservación precisa de invariantes físicas</li>
                                 </ul>
-                            </div>
-                            <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                            </div>                            <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
                                 <h4 class="font-semibold text-blue-800 mb-3">Características</h4>
                                 <ul class="list-disc list-inside text-blue-700 space-y-1">
                                     <li>Términos D₃ y R₃ añaden complejidad física</li>
                                     <li>Mayor número de derivadas requiere más puntos</li>
-                                    <li>Interacción entre dispersión y no linealidad</li>
-                                    <li>Tiempo de entrenamiento significativo (3.5 horas)</li>
+                                    <li>Excelente interacción entre dispersión y no linealidad</li>
+                                    <li>Tiempo de entrenamiento razonable (2.0 horas)</li>
                                 </ul>
                             </div>
                         </div>
@@ -1743,19 +1742,19 @@ def neural_net(self, X, weights, biases):
                             <div class="space-y-2">
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Error L2 en Re(q):</span>
-                                    <span class="font-mono text-amber-600">5.17e-02</span>
+                                    <span class="font-mono text-green-600">5.68e-03</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Error L2 en Im(q):</span>
-                                    <span class="font-mono text-amber-600">5.87e-02</span>
+                                    <span class="font-mono text-green-600">4.49e-03</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Error L2 en |q|:</span>
-                                    <span class="font-mono text-amber-600">1.86e-02</span>
+                                    <span class="font-mono text-green-600">3.72e-03</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Tiempo de Entrenamiento:</span>
-                                    <span class="font-mono text-blue-600">~2 horas</span>
+                                    <span class="font-mono text-blue-600">~2.0 horas</span>
                                 </div>
                             </div>
                         </div>
@@ -1842,14 +1841,13 @@ def neural_net(self, X, weights, biases):
                                     <li>Menor número de términos en la PDE</li>
                                     <li>Útil para estudios de dispersión pura</li>
                                 </ul>
-                            </div>
-                            <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
+                            </div>                            <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-500">
                                 <h4 class="font-semibold text-amber-800 mb-3">Desafíos</h4>
                                 <ul class="list-disc list-inside text-amber-700 space-y-1">
-                                    <li>Errores moderados comparables a Hirota (~2-6%)</li>
-                                    <li>Ausencia de término q_xx reduce estabilidad numérica</li>
+                                    <li>Error ligeramente mayor que Hirota (~0.37% vs 0.18%)</li>
+                                    <li>Ausencia de término q_xx puede reducir estabilidad numérica</li>
                                     <li>Requiere muchos puntos de colocación</li>
-                                    <li>Sensible a la inicialización de pesos</li>
+                                    <li>Más sensible a la inicialización de pesos</li>
                                 </ul>
                             </div>
                         </div>
@@ -1869,13 +1867,13 @@ def neural_net(self, X, weights, biases):
                                 </thead>                                <tbody class="divide-y divide-gray-200">
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-4 py-3 font-medium">Error L2 en |q|</td>
-                                        <td class="px-4 py-3 text-center text-amber-600">2.01e-02</td>
-                                        <td class="px-4 py-3 text-center text-green-600 font-bold">1.86e-02 ✅</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">1.80e-03 ✅</td>
+                                        <td class="px-4 py-3 text-center text-green-600">3.72e-03</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-4 py-3 font-medium">Tiempo de Entrenamiento</td>
-                                        <td class="px-4 py-3 text-center">~3.5 horas</td>
-                                        <td class="px-4 py-3 text-center text-green-600 font-bold">~2 horas ✅</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">~2.0 horas ✅</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">~2.0 horas ✅</td>
                                     </tr>
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-4 py-3 font-medium">Arquitectura</td>
@@ -1894,13 +1892,342 @@ def neural_net(self, X, weights, biases):
                                     </tr>
                                     <tr class="bg-indigo-50 hover:bg-indigo-100">
                                         <td class="px-4 py-3 font-medium">Recomendación</td>
-                                        <td class="px-4 py-3 text-center text-amber-700 font-semibold">Modelo completo (pero costoso)</td>
-                                        <td class="px-4 py-3 text-center text-green-700 font-semibold">Mejor balance precisión/tiempo ✅</td>
+                                        <td class="px-4 py-3 text-center text-green-700 font-semibold">Mejor precisión absoluta (0.18%) ✅✅</td>
+                                        <td class="px-4 py-3 text-center text-green-700 font-semibold">Más simple, buena precisión (0.37%) ✅</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>                </div>
+            </section>            <!-- New Section: 4th Order NLS - LPD Method with XPINN -->
+            <section id="nls-4order-lpd-xpinn" class="section-card p-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Ecuación NLS de 4° Orden: Método LPD con XPINN</h2>
+                
+                <div class="max-w-6xl mx-auto space-y-12">
+                    <!-- Introducción y Ecuación -->
+                    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-8 rounded-lg border-l-4 border-purple-500">
+                        <h3 class="text-2xl font-semibold text-purple-800 mb-6">Ecuación LPD (Lakshmanan-Porsezian-Daniel)</h3>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            La ecuación de Schrödinger no lineal de cuarto orden (LPD) incluye términos de dispersión de orden superior 
+                            y no linealidades adicionales que modelan fenómenos más complejos en óptica no lineal y física de plasmas:
+                        </p>
+                        <div class="bg-white p-6 rounded-lg shadow-inner mb-6">
+                            <div class="text-center text-xl text-gray-800 mb-4">
+                                $$i q_t + \frac{1}{2} D_2 q_{xx} + R_2 |q|^2 q + D_4 q_{xxxx} + \frac{6R_4^2}{D_4} |q|^4 q$$
+                            </div>
+                            <div class="text-center text-xl text-gray-800">
+                                $$+ 2R_4(4|q|^2 q_{xx} + 2|q_x|^2 q + 3(q_x)^2 q^* + q^2 (q^*)_{xx}) = 0$$
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="font-semibold text-purple-800 mb-3">Parámetros del Sistema</h4>
+                                <ul class="text-gray-700 space-y-2">
+                                    <li><strong>D₂ = R₂ = 1.0</strong> - Dispersión y no linealidad de 2° orden</li>
+                                    <li><strong>D₃ = R₃ = 0.0</strong> - Sin términos de 3er orden (LPD puro)</li>
+                                    <li><strong>D₄ = R₄ = 1/64</strong> - Dispersión y no linealidad de 4° orden</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="font-semibold text-purple-800 mb-3">Parámetros de Solitones</h4>
+                                <ul class="text-gray-700 space-y-2">
+                                    <li><strong>η₁ = 0.5, η₂ = 0.5</strong> - Amplitudes</li>
+                                    <li><strong>κ₁ = 1.0, κ₂ = -1.0</strong> - Números de onda</li>
+                                    <li><strong>Periodo: T<sub>LPD</sub> = π/6 ≈ 0.524</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuración XPINN -->
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Configuración del XPINN</h3>
+                        <p class="text-gray-700 text-center mb-8 max-w-3xl mx-auto">
+                            Debido al alto costo computacional, se utilizaron <strong>3 subdominios temporales</strong> 
+                            cubriendo aproximadamente 3 periodos de LPD (dominio [0, 3T<sub>LPD</sub>]).
+                        </p>
+                        
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-semibold text-blue-800 mb-3">Subdominio 1</h4>
+                                <p class="text-blue-700 text-sm">t ∈ [0, T<sub>LPD</sub>]</p>
+                                <p class="text-blue-600 text-xs mt-2">Primer periodo completo</p>
+                            </div>
+                            <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                                <h4 class="font-semibold text-green-800 mb-3">Subdominio 2</h4>
+                                <p class="text-green-700 text-sm">t ∈ [T<sub>LPD</sub>, 2T<sub>LPD</sub>]</p>
+                                <p class="text-green-600 text-xs mt-2">Segundo periodo</p>
+                            </div>
+                            <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
+                                <h4 class="font-semibold text-purple-800 mb-3">Subdominio 3</h4>
+                                <p class="text-purple-700 text-sm">t ∈ [2T<sub>LPD</sub>, 3T<sub>LPD</sub>]</p>
+                                <p class="text-purple-600 text-xs mt-2">Tercer periodo</p>
+                            </div>
+                        </div>
+                    </div>                    <!-- Visualizaciones LPD -->
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Visualizaciones de Resultados - LPD 4° Orden</h3>
+                        
+                        <!-- 1. Pérdidas de entrenamiento -->
+                        <div class="mb-10">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-amber-200">
+                                <img src="xpinn_lpd_losses.png" alt="Pérdidas LPD" class="w-full rounded-lg shadow-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Evolución de las Pérdidas Durante el Entrenamiento
+                                </p>
+                                <p class="text-gray-600 text-base mt-3 text-center">
+                                    Pérdida total, condición inicial y residuo de PDE para cada subdominio
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 2. Evolución temporal GIF -->
+                        <div class="mb-10">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-green-200">
+                                <img src="xpinn_lpd_evolution.gif" alt="Evolución temporal LPD" class="w-full rounded-lg shadow-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Evolución Temporal de |q(x,t)|
+                                </p>
+                                <p class="text-gray-600 text-base mt-3 text-center">
+                                    Comparación dinámica entre solución exacta (azul) y predicción XPINN (rojo punteado)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 4. Superficies 3D -->
+                        <div class="mb-10">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-blue-200">
+                                <img src="xpinn_lpd_3d_surfaces.png" alt="Superficies 3D LPD" class="w-full rounded-lg shadow-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Visualización 3D de Soluciones
+                                </p>
+                                <p class="text-gray-600 text-base mt-3 text-center">
+                                    Superficies 3D mostrando |q| exacto, predicho y el error
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 5. Subdominios 1-3 -->
+                        <div class="mb-10">
+                            <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-indigo-200">
+                                <img src="xpinn_lpd_subdominios_1_3.png" alt="Subdominios 1-3 LPD" class="w-full rounded-lg shadow-lg">
+                                <p class="text-xl text-gray-700 mt-6 text-center font-semibold">
+                                    Vista Combinada de los Tres Subdominios Temporales
+                                </p>
+                                <p class="text-gray-600 text-base mt-3 text-center">
+                                    Continuidad en las interfaces temporales (líneas blancas punteadas)
+                                </p>
+                            </div>
+                        </div>
+                    </div><!-- Observaciones Experimentales -->
+                    <div class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg border-l-4 border-blue-500">
+                        <h3 class="text-2xl font-semibold text-blue-800 mb-6 text-center">🔬 Observaciones Experimentales: Búsqueda de la Configuración Óptima</h3>
+                        
+                        <p class="text-gray-700 mb-6 text-center max-w-4xl mx-auto leading-relaxed">
+                            El entrenamiento de PINNs para ecuaciones de 4° orden es extremadamente sensible a la configuración. 
+                            A continuación se documentan los experimentos realizados para encontrar la configuración óptima.
+                        </p>
+
+                        <!-- Tabla de experimentos -->
+                        <div class="overflow-x-auto mb-8">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-4 text-center">Resumen de Experimentos Realizados</h4>
+                            <table class="w-full bg-white rounded-lg shadow overflow-hidden">
+                                <thead class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left">Experimento</th>
+                                        <th class="px-4 py-3 text-center">Configuración</th>
+                                        <th class="px-4 py-3 text-center">Error u</th>
+                                        <th class="px-4 py-3 text-center">Error v</th>
+                                        <th class="px-4 py-3 text-center">Error |q|</th>
+                                        <th class="px-4 py-3 text-center">Observación</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-blue-50">
+                                        <td class="px-4 py-3 font-medium">Base (sin BC_xx, BC_xxx)</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            [2,80,80,80,80,80,80,2]<br>
+                                            40K puntos, 3K IC
+                                        </td>
+                                        <td class="px-4 py-3 text-center text-green-600">2.287e-02</td>
+                                        <td class="px-4 py-3 text-center text-green-600">2.302e-02</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">7.041e-03</td>
+                                        <td class="px-4 py-3 text-sm">✅ Mejor configuración periódica</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Con BC_xx, BC_xxx (20K)</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            [2,80,80,80,80,80,80,2]<br>
+                                            20K puntos
+                                        </td>
+                                        <td class="px-4 py-3 text-center text-amber-600">2.925e-02</td>
+                                        <td class="px-4 py-3 text-center text-amber-600">2.869e-02</td>
+                                        <td class="px-4 py-3 text-center text-amber-600">1.170e-02</td>
+                                        <td class="px-4 py-3 text-sm">⚠️ Funciona pero no mejora</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Con BC_xx, BC_xxx (40K)</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            [2,80,80,80,80,80,80,2]<br>
+                                            40K puntos
+                                        </td>
+                                        <td class="px-4 py-3 text-center text-red-600">7.054e-02</td>
+                                        <td class="px-4 py-3 text-center text-red-600">7.046e-02</td>
+                                        <td class="px-4 py-3 text-center text-red-600">2.195e-02</td>
+                                        <td class="px-4 py-3 text-sm">❌ Empeora con más puntos</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Red más profunda (7 capas)</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            [2,80,80,80,80,80,80,80,2]<br>
+                                            40K puntos
+                                        </td>
+                                        <td class="px-4 py-3 text-center text-amber-600">4.106e-02</td>
+                                        <td class="px-4 py-3 text-center text-amber-600">4.039e-02</td>
+                                        <td class="px-4 py-3 text-center text-amber-600">1.381e-02</td>
+                                        <td class="px-4 py-3 text-sm">⚠️ Más capas no ayuda</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">Red más profunda (8 capas)</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            [2,80,80,80,80,80,80,80,80,2]<br>
+                                            40K puntos
+                                        </td>
+                                        <td class="px-4 py-3 text-center text-amber-600">3.296e-02</td>
+                                        <td class="px-4 py-3 text-center text-amber-600">3.365e-02</td>
+                                        <td class="px-4 py-3 text-center text-amber-600">1.396e-02</td>
+                                        <td class="px-4 py-3 text-sm">⚠️ Similar a 7 capas</td>
+                                    </tr>
+                                    <tr class="bg-green-50 hover:bg-green-100 border-2 border-green-300">
+                                        <td class="px-4 py-3 font-medium text-green-800">Configuración no periódica ⭐</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            [2,80,80,80,80,80,80,2]<br>
+                                            Parámetros diferentes
+                                        </td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">3.371e-03</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">2.738e-03</td>
+                                        <td class="px-4 py-3 text-center text-green-600 font-bold">1.961e-03</td>
+                                        <td class="px-4 py-3 text-sm">✅✅ Mismo modelo, parámetros distintos</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Análisis detallado -->
+                        <div class="grid md:grid-cols-2 gap-6 mt-8">
+                            <!-- Experimento 1: Dominio Espacial -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-lg font-semibold text-blue-800 mb-3 flex items-center">
+                                    <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
+                                    Variación del Dominio Espacial
+                                </h4>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    <strong>Hipótesis:</strong> Un dominio más amplio permitiría capturar mejor el comportamiento asintótico.
+                                </p>
+                                <ul class="text-gray-600 text-sm list-disc list-inside space-y-1">
+                                    <li>x ∈ [-6, 6]: Solución "cortada", errores altos</li>
+                                    <li>x ∈ [-8, 8]: Mejora marginal en algunas zonas</li>
+                                    <li>x ∈ [-10, 10]: <strong>Óptimo</strong> - solitones se disipan naturalmente</li>
+                                </ul>
+                                <p class="text-blue-600 text-sm mt-3 italic">
+                                    💡 <strong>Conclusión:</strong> Dominio amplio reduce errores de frontera y mejora tiempo de entrenamiento.
+                                </p>
+                            </div>
+
+                            <!-- Experimento 2: Arquitectura (Neuronas/Capas) -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-lg font-semibold text-purple-800 mb-3 flex items-center">
+                                    <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
+                                    Arquitectura: Neuronas y Capas
+                                </h4>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    <strong>Hipótesis:</strong> Más neuronas/capas = mayor capacidad de aproximación.
+                                </p>
+                                <ul class="text-gray-600 text-sm list-disc list-inside space-y-1">
+                                    <li>[2,100,100,100,100,100,100,2]: No mejora, más lento</li>
+                                    <li>[2,80,...,80,2] (7 capas): Error ~1.38% ≈ 6 capas</li>
+                                    <li>[2,80,...,80,2] (8 capas): Error ~1.40% ≈ 7 capas</li>
+                                </ul>
+                                <p class="text-purple-600 text-sm mt-3 italic">
+                                    💡 <strong>Conclusión:</strong> 6 capas de 80 neuronas es el punto óptimo. Más profundidad causa overfitting/gradientes débiles.
+                                </p>
+                            </div>
+
+                            <!-- Experimento 3: Puntos de Colocación -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-lg font-semibold text-green-800 mb-3 flex items-center">
+                                    <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">3</span>
+                                    Puntos de Colocación
+                                </h4>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    <strong>Hipótesis:</strong> Más puntos = mejor muestreo de la PDE.
+                                </p>
+                                <ul class="text-gray-600 text-sm list-disc list-inside space-y-1">
+                                    <li>10K puntos: Subentrenamiento, error >3%</li>
+                                    <li>20K puntos: Balance razonable, error ~1.17%</li>
+                                    <li>40K puntos: <strong>Mejor sin BC_xx/xxx</strong> (0.70%)</li>
+                                    <li>50K+ puntos: Tiempo prohibitivo sin mejora</li>
+                                </ul>
+                                <p class="text-green-600 text-sm mt-3 italic">
+                                    💡 <strong>Conclusión:</strong> 40K puntos es óptimo, pero beneficio disminuye. Trade-off tiempo/precisión.
+                                </p>
+                            </div>
+
+                            <!-- Experimento 4: Derivadas de Frontera -->
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h4 class="text-lg font-semibold text-amber-800 mb-3 flex items-center">
+                                    <span class="bg-amber-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">4</span>
+                                    Derivadas de Frontera (BC_xx, BC_xxx)
+                                </h4>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    <strong>Hipótesis:</strong> Forzar periodicidad de derivadas de orden superior mejora solución.
+                                </p>
+                                <ul class="text-gray-600 text-sm list-disc list-inside space-y-1">
+                                    <li>20K puntos + BC_xx/xxx: Error 1.17% (funciona)</li>
+                                    <li>40K puntos + BC_xx/xxx: Error 2.20% <strong>(empeora!)</strong></li>
+                                    <li>Posible causa: Pérdida mal condicionada, gradientes conflictivos</li>
+                                </ul>
+                                <p class="text-amber-600 text-sm mt-3 italic">
+                                    ⚠️ <strong>Conclusión:</strong> Resultado contraintuitivo. BC_xx/xxx puede sobrerestringir el problema. Requiere investigación adicional.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Descubrimiento clave -->
+                        <div class="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 p-6 rounded-lg border-2 border-green-400">
+                            <h4 class="text-xl font-semibold text-green-800 mb-4 text-center">🎯 Descubrimiento Clave: Importancia de los Parámetros Físicos</h4>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                    <h5 class="font-semibold text-gray-800 mb-2">Caso Periódico (Difícil)</h5>
+                                    <p class="text-gray-700 text-sm mb-2">
+                                        <strong>Configuración:</strong> Mismo dominio, misma arquitectura [2,80×6,2]
+                                    </p>
+                                    <ul class="text-gray-600 text-sm list-disc list-inside space-y-1">
+                                        <li>Error |q|: <span class="text-amber-600 font-bold">7.041e-03</span> (0.70%)</li>
+                                        <li>Solución periódica, colisión en t=1.5</li>
+                                        <li>Dinámica compleja, múltiples escalas</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                    <h5 class="font-semibold text-gray-800 mb-2">Caso No Periódico (Fácil) ⭐</h5>
+                                    <p class="text-gray-700 text-sm mb-2">
+                                        <strong>Configuración:</strong> Mismo dominio, misma arquitectura [2,80×6,2]
+                                    </p>
+                                    <ul class="text-gray-600 text-sm list-disc list-inside space-y-1">
+                                        <li>Error |q|: <span class="text-green-600 font-bold">1.961e-03</span> (0.20%)</li>
+                                        <li>Parámetros diferentes (no periódico)</li>
+                                        <li>Dinámica más simple, convergencia rápida</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="text-green-800 text-center mt-4 font-medium">
+                                💡 <strong>Conclusión:</strong> El error se redujo 3.6× (de 0.70% a 0.20%) <strong>solo cambiando parámetros físicos</strong>, 
+                                sin modificar arquitectura, puntos de colocación ni optimizador. Esto demuestra que <strong>la elección de parámetros 
+                                físicos adecuados es crítica</strong> para el éxito del PINN.                            </p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
              <section id="conclusion" class="section-card p-12">
@@ -2613,5 +2940,6 @@ if __name__ == "__main__":
     </script>
 </body>
 </html>
+
 
 
